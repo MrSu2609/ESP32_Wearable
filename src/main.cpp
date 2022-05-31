@@ -188,38 +188,21 @@ void setup() {
   xTaskCreate(task_IO,"Task 3",8192,NULL,1,NULL);
 }
 
+unsigned long lastMillis = 0;
 void loop() {
-  // put your main code here, to run repeatedly:
-  
-  if(strIO_Button_Value.bButtonState[eButton2]==eButtonSingleClick)
-  {
-    strIO_Button_Value.bButtonState[eButton2] = eButtonHoldOff;
-    vIO_ConfigOutput(&strLED_GR, (enumbool)(1 - (int)pLED1.writeSta()), 1, 1, eFALSE);
-    WorkMode = !WorkMode;
-    SPO2Max = 0;
-    AvgMax = 0;
-  }
-  if(strIO_Button_Value.bButtonState[eButton1]==eButtonSingleClick)
-  {
-    strIO_Button_Value.bButtonState[eButton1] = eButtonHoldOff;
-    if(!WorkMode)
-    {
-      vIO_ConfigOutput(&strLED_RD, eTRUE, 2, 50, eFALSE);
-      OLED_Display(temp_obj, AvgMax, SPO2Max, false);
+  mqtt->loop();
+  delay(10);  // <- fixes some issues with WiFi stability
 
-      SPO2Max = 0;
-      AvgMax = 0;
-      start = true;
-    }
+  if (!mqttClient->connected()) {
+    connect();
   }
 
-  if(BLE_isConnected())
-  {
-    if(Serial.available() > 0)
-    {
-      value[53] = (uint8_t)Serial.read();
-      BLE_sendData((uint8_t*)&value, 54);
-    }
+  // TODO: replace with your code
+  // publish a message roughly every second.
+  if (millis() - lastMillis > 60000) {
+    lastMillis = millis();
+    //publishTelemetry(mqttClient, "/sensors", getDefaultSensor());
+    publishTelemetry(getDefaultSensor());
   }
 }
 
