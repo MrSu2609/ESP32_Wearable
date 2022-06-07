@@ -11,7 +11,7 @@
 /****************************************************************************/
 /***        Macro Definitions                                             ***/
 /****************************************************************************/
-#define bleServerName "FPT_HC_IoT_TempHRate0-%C%C%C%C"    //Max 26 character!
+#define bleServerName "FPT_IoTS_BTempHRate01-%C%C%C%C"    //Max 26 character!
 #define SERVICE_UUID "7bde7b9d-547e-4703-9785-ceedeeb2863e"
 #define TX_CHARACTERISTIC_UUID "9d45a73a-b19f-4739-8339-ecad527b4455"
 #define RX_CHARACTERISTIC_UUID "9a847af6-300b-4966-b32b-0c47a7b2c418"
