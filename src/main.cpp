@@ -86,13 +86,15 @@ void task_Application(void *parameter)
         if(bFlag_1st_TaskState)
         {
           //read work mode
-          display_config(sensor_getTemp());
+          //display_config(sensor_getTemp());
+          App_BLE_SendTemp(25);
           bFlag_1st_TaskState = false;
         }
         else{
           //Check finger in?
           display_config(sensor_getTemp());
-          App_BLE_SendTemp(sensor_getTemp());
+          //App_BLE_SendTemp(sensor_getTemp());
+          App_BLE_SendTemp(25);
         }
         break;
       case E_STATE_ONESHOT_TASK:
@@ -253,8 +255,8 @@ void setup()
   strIO_Button_Value.bButtonState[eButton2] = eButtonRelease;
   strOld_IO_Button_Value.bButtonState[eButton2] = eButtonRelease;
   
-  sensor_Setup();
-  display_Setup();
+  //sensor_Setup();
+  //display_Setup();
   BLE_Init(StrCfg1.Parameter.DeviceID, auBLETxBuffer, sizeof(auBLETxBuffer), auBLERxBuffer, sizeof(auBLERxBuffer));
   delay(1000);
   //wifi_Setup();
@@ -266,7 +268,7 @@ void setup()
 
 void loop() {
   // put your main code here, to run repeatedly:
-  sensor_updateValue();
+  //sensor_updateValue();
   wifi_loop(StrCfg1.Parameter.DeviceID);
 }
 
