@@ -15,8 +15,10 @@ typedef enum {
     E_URL_CFG_ID          = 0x08,
     E_DEVICE_DATA_ID      = 0x09,
     E_PRIVATE_KEY_ID      = 0x0A,
-    E_ONESHOT_MODE_ID     = 0x0B,
-    E_CONTINUOUS_MODE_ID  = 0x0C,
+    E_ONESHOT_TEMP_ID     = 0x0B,
+    E_ONESHOT_SPO2_ID     = 0x0C,
+    E_ONESHOT_MODE_ID     = 0x0D,
+    E_CONTINUOUS_MODE_ID  = 0x0E,
     E_PRODUCT_INFO_ID     = 0x21,
     E_RESTART_DEVICE_ID   = 0x22,
 } Msg_teID_Type;

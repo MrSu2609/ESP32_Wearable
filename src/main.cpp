@@ -98,13 +98,37 @@ void task_Application(void *parameter)
           //App_BLE_SendTemp(25);
         }
         break;
-      case E_STATE_ONESHOT_TASK:
+      case E_STATE_ONESHOT_TASK_TEMP:
         if(bFlag_1st_TaskState)
         {
           //display_config1(sensor_getTemp(), MaxHearbeat, MaxSPO2);
           //bFlag_1st_TaskState = false;
-          Serial.println("[DEBUG]: ONESHOT TASK!");
+          Serial.println("[DEBUG]: ONESHOT TASK TEMPERATURE!");
           App_BLE_SendTemp(32);
+          bFlag_1st_TaskState = true;
+          eUserTask_State = E_STATE_STARTUP_TASK;
+        }
+        else{
+          /*if(startFlag){
+            startFlag = false;
+            MaxSPO2 = 0;
+            MaxHearbeat = 0;
+
+            eUserTask_State = E_STATE_PROCESSING_TASK;
+            bFlag_1st_TaskState = true;
+          }
+          else{
+            display_config1(sensor_getTemp(), MaxHearbeat, MaxSPO2);
+          }*/
+        }
+        break;
+        case E_STATE_ONESHOT_TASK_SPO2:
+        if(bFlag_1st_TaskState)
+        {
+          //display_config1(sensor_getTemp(), MaxHearbeat, MaxSPO2);
+          //bFlag_1st_TaskState = false;
+          Serial.println("[DEBUG]: ONESHOT TASK SP02!");
+          App_BLE_SendSensor(97,75);
           bFlag_1st_TaskState = true;
           eUserTask_State = E_STATE_STARTUP_TASK;
         }
@@ -303,6 +327,22 @@ void App_BLE_ProcessMsg(uint8_t MsgID, uint8_t MsgLength, uint8_t* pu8Data)
     }
     case E_WORK_MODE_ID:
       
+      break;
+    case E_ONESHOT_TEMP_ID:
+      LED_GREEN_TOG;
+      if(eUserTask_State != E_STATE_ONESHOT_TASK_TEMP)
+      {
+        bFlag_1st_TaskState = true;
+        eUserTask_State = E_STATE_ONESHOT_TASK_TEMP;
+      }
+      break;
+    case E_ONESHOT_SPO2_ID:
+      LED_BLUE_TOG;
+      if(eUserTask_State != E_STATE_ONESHOT_TASK_SPO2)
+      {
+        bFlag_1st_TaskState = true;
+        eUserTask_State = E_STATE_ONESHOT_TASK_SPO2;
+      }
       break;
     case E_ONESHOT_MODE_ID:
       LED_GREEN_TOG;
