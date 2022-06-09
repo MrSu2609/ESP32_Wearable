@@ -87,24 +87,29 @@ void task_Application(void *parameter)
         {
           //read work mode
           //display_config(sensor_getTemp());
-          App_BLE_SendTemp(25);
+          Serial.println("[DEBUG]: STARTUP TASK!");
+          //App_BLE_SendTemp(25);
           bFlag_1st_TaskState = false;
         }
         else{
           //Check finger in?
-          display_config(sensor_getTemp());
+          //display_config(sensor_getTemp());
           //App_BLE_SendTemp(sensor_getTemp());
-          App_BLE_SendTemp(25);
+          //App_BLE_SendTemp(25);
         }
         break;
       case E_STATE_ONESHOT_TASK:
         if(bFlag_1st_TaskState)
         {
-          display_config1(sensor_getTemp(), MaxHearbeat, MaxSPO2);
-          bFlag_1st_TaskState = false;
+          //display_config1(sensor_getTemp(), MaxHearbeat, MaxSPO2);
+          //bFlag_1st_TaskState = false;
+          Serial.println("[DEBUG]: ONESHOT TASK!");
+          App_BLE_SendTemp(32);
+          bFlag_1st_TaskState = true;
+          eUserTask_State = E_STATE_STARTUP_TASK;
         }
         else{
-          if(startFlag){
+          /*if(startFlag){
             startFlag = false;
             MaxSPO2 = 0;
             MaxHearbeat = 0;
@@ -114,12 +119,13 @@ void task_Application(void *parameter)
           }
           else{
             display_config1(sensor_getTemp(), MaxHearbeat, MaxSPO2);
-          }
+          }*/
         }
         break;
       case E_STATE_PROCESSING_TASK:
         if(bFlag_1st_TaskState)
         {
+          Serial.println("[DEBUG]: PROCESING TASK!");
           display_config2(sensor_getTemp());
           bFlag_1st_TaskState = false;
         }
@@ -139,6 +145,7 @@ void task_Application(void *parameter)
       case E_STATE_CONTINUOUS_TASK:
         if(bFlag_1st_TaskState)
         {
+          Serial.println("[DEBUG]: CONTINOUS TASK!");
           display_config1(sensor_getTemp(), sensor_getHeardBeat(), sersor_getSPO2());
           bFlag_1st_TaskState = false;
         }
@@ -241,11 +248,13 @@ void setup()
     StrCfg1.Parameter.interval = 1;
     App_Parameter_Save(&StrCfg1);
   }
-
+  Serial.println("[DEBUG]: SYSTEM INIT!");
+  Serial.println("[DEBUG]: LED INIT!");
   LED1_Init(&pLED1);
   LED2_Init(&pLED2);
   LED3_Init(&pLED3);
 
+  Serial.println("[DEBUG]: BUTTON INIT!");
   strIO_Button_Value.bFlagNewButton =  eFALSE;
   BUTTON1_Init(&pBUT_1);
   strIO_Button_Value.bButtonState[eButton1] = eButtonRelease;
@@ -257,6 +266,7 @@ void setup()
   
   //sensor_Setup();
   //display_Setup();
+  Serial.println("[DEBUG]: BLE INIT!");
   BLE_Init(StrCfg1.Parameter.DeviceID, auBLETxBuffer, sizeof(auBLETxBuffer), auBLERxBuffer, sizeof(auBLERxBuffer));
   delay(1000);
   //wifi_Setup();

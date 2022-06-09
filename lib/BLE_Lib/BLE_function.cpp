@@ -324,12 +324,22 @@ static bool BLE_vRxCharParser(uint8_t u8RxChar)
       break;
     case E_STATE_WAIT_CRC1:
       eRxState = E_STATE_WAIT_START;
-      if(u8RxChar == APP_u8CalculateCRC(MsgRxSize, MsgRxStatus, MsgRxID, MsgSeqID, MsgTimeStam, MsgRxDataBuffer))
+      static uint8_t bTestCRC;
+      bTestCRC = APP_u8CalculateCRC(MsgRxSize, MsgRxStatus, MsgRxID, MsgSeqID, MsgTimeStam, MsgRxDataBuffer);
+      Serial.print("[DEBUG]: PAYLOAD CRC:");
+      Serial.print(u8RxChar, HEX);
+      Serial.println();
+      Serial.print("[DEBUG]: CALCULATE CRC:");
+      Serial.print(bTestCRC, HEX);
+      Serial.println();
+      if(u8RxChar == bTestCRC)
+      {
         return true;
+      }
       else{
         Serial.println("BAD CRC!");
       }
-        break;
+      break;
   }
   return false;
 }
